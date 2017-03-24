@@ -4,18 +4,20 @@ namespace Uno\Core;
 
 use Whoops\Handler\PrettyPageHandler;
 use Whoops\Handler\JsonResponseHandler;
+use Whoops\Run;
+use Whoops\Util\Misc;
 
 class ErrorHandler
 {
 
     public function handle()
     {
-//        dd(config('app.debug'));
-//
-//        if(!config('app.debug')) {
-//            return;
-//        }
-        $run     = new \Whoops\Run;
+
+        if(config('app.debug') === false) {
+            return;
+        }
+
+        $run     = new Run;
         $handler = new PrettyPageHandler;
 
         // Add some custom tables with relevant info about your application,
@@ -35,7 +37,7 @@ class ErrorHandler
         // first in the stack, it will be executed before the error
         // page handler, and will have a chance to decide if anything
         // needs to be done.
-        if (\Whoops\Util\Misc::isAjaxRequest()) {
+        if (Misc::isAjaxRequest()) {
             $run->pushHandler(new JsonResponseHandler);
         }
 

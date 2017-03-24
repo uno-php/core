@@ -23,8 +23,6 @@ class TemplateEngine
         $this->createFunctions();
 
         $this->createLexers();
-
-//        echo $this->twig->render($name . $ext,  $params);
     }
 
     private function createFunctions()

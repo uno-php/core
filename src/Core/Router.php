@@ -7,11 +7,11 @@ use AltoRouter;
 
 class Router
 {
-    public function process($routes = __DIR__ .'/../routes.php', $namespace = "App\\Controllers\\")
+    public function process($routes = null, $namespace = "App\\Controllers\\")
     {
         $router = new AltoRouter();
 
-        $routes = require_once $routes;
+        $routes = require_once is_null($routes) ? routes_path('web.php') : null;
 
         $router->addRoutes($routes);
 
@@ -29,4 +29,3 @@ class Router
         }
     }
 }
-

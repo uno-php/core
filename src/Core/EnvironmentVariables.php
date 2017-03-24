@@ -2,14 +2,12 @@
 
 namespace Uno\Core;
 
-
 use Dotenv\Dotenv;
 
 class EnvironmentVariables
 {
-    public function load($dir = __DIR__ . '/../../')
+    public function load($dir = null)
     {
-        $dotenv = new Dotenv($dir);
-        $dotenv->load();
+        (new Dotenv(!is_null($dir) ? $dir : base_path()))->load();
     }
 }

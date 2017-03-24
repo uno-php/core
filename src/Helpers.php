@@ -33,14 +33,18 @@ if(!function_exists('config')) {
             if(isset($value[3])&& !is_null($data)) {
                 $data = isset($data[$value[3]]) ? $data[$value[3]] : null;
             }
+
         }
-        return is_null($data) ? (!empty($default) ? $default : $data) : $data;
+
+        return is_null($data)
+            ? (!empty($default) ? $default : ((!is_bool($data)) ? $data : boolval($data)))
+            : ((!is_bool($data)) ? $data : boolval($data));
     }
 }
 
 if(!function_exists('view')) {
-    function view($name, $params = [], $path = "views/", $ext = '.phtml') {
-
+    function view($name, $params = [], $path = "views/", $ext = '.phtml')
+    {
         $templateEngine = new TemplateEngine($path);
 
         echo $templateEngine->render($name . $ext,  $params);
@@ -50,40 +54,45 @@ if(!function_exists('view')) {
 
 if(!function_exists('public_path')) {
     function public_path($name = '') {
-        return __DIR__ . "/../public/" . $name;
+        return base_path("public/" . $name);
     }
 }
 
 if(!function_exists('resources_path')) {
     function resources_path($name = '') {
-        return __DIR__ . "/../resources/" . $name;
+        return base_path("resources/" . $name);
     }
 }
 
 if(!function_exists('app_path')) {
     function app_path($name = '') {
-        return __DIR__ . "/../app/" . $name;
+        return base_path("app/" . $name);
     }
 }
 
 if(!function_exists('storage_path')) {
     function storage_path($name = '') {
-        return __DIR__ . "/../storage/" . $name;
+        return base_path("storage/" . $name);
     }
 }
 
 if(!function_exists('config_path')) {
     function config_path($name = '') {
-        return __DIR__ . "/../config/" . $name;
+        return base_path("config/" . $name);
     }
 }
 
 if(!function_exists('routes_path')) {
     function routes_path($name = '') {
-        return __DIR__ . "/../routes/" . $name;
+        return base_path("routes/" . $name);
     }
 }
 
+if(!function_exists('base_path')) {
+    function base_path($name = '', $basePath = __DIR__ . "/../../../../") {
+        return $basePath. $name;
+    }
+}
 
 if(!function_exists('asset')) {
     function asset($string){
