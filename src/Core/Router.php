@@ -11,7 +11,7 @@ class Router
     {
         $router = new AltoRouter();
 
-        $routes = require_once is_null($routes) ? routes_path('web.php') : null;
+        $routes = require_once (is_null($routes) ? routes_path('web.php') : $routes);
 
         $router->addRoutes($routes);
 
