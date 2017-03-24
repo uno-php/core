@@ -1,0 +1,21 @@
+{
+  "name": "uno/core",
+  "description": "The Uno Framework.",
+  "keywords": ["framework", "uno"],
+  "license": "MIT",
+  "type": "project",
+  "require":{
+    "vlucas/phpdotenv": "^2.4",
+    "altorouter/altorouter": "^1.2",
+    "twig/twig": "^2.3",
+    "filp/whoops": "^2.1",
+    "tightenco/collect": "^5.4",
+    "illuminate/container": "^5.4"
+  },
+  "autoload": {
+    "psr-4": {
+      "Uno\\": "src/"
+    },
+    "files": ["src/Support/Helpers.php"]
+  }
+}
