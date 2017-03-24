@@ -16,6 +16,6 @@
     "psr-4": {
       "Uno\\": "src/"
     },
-    "files": ["src/Support/Helpers.php"]
+    "files": ["src/Helpers.php"]
   }
 }
