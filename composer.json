@@ -10,8 +10,8 @@
     "twig/twig": "^2.3",
     "filp/whoops": "^2.1",
     "tightenco/collect": "^5.4",
-    "illuminate/container": "^5.4"
-
+    "illuminate/container": "^5.4",
+    "swiftmailer/swiftmailer": "^5.4"
   },
   "autoload": {
     "psr-4": {
