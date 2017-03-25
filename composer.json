@@ -4,6 +4,7 @@
   "keywords": ["framework", "uno"],
   "license": "MIT",
   "type": "project",
+
   "require":{
     "vlucas/phpdotenv": "^2.4",
     "altorouter/altorouter": "^1.2",
