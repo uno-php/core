@@ -1,7 +1,7 @@
 {
-  "name": "uno/core",
+  "name": "uno-php/core",
   "description": "The Uno Framework.",
-  "keywords": ["framework", "uno"],
+  "keywords": ["framework", "uno", "uno-php"],
   "license": "MIT",
   "type": "project",
 
