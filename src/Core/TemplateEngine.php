@@ -39,9 +39,14 @@ class TemplateEngine
             return config($name, $default );
         });
 
+        $mixFunction = new Twig_SimpleFunction('mix', function ($path) {
+            return mix($path);
+        });
+
         $this->twig->addFunction($assetFunction);
         $this->twig->addFunction($urlFunction);
         $this->twig->addFunction($configFunction);
+        $this->twig->addFunction($mixFunction);
     }
 
     public function render($file, $params)
