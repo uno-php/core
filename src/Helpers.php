@@ -43,7 +43,7 @@ if(!function_exists('config')) {
 }
 
 if(!function_exists('view')) {
-    function view($name, $params = [], $path = "views/", $ext = '.phtml')
+    function view($name, $params = [], $path = "views/", $ext = '.html')
     {
         $templateEngine = new TemplateEngine($path);
 
