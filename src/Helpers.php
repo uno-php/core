@@ -106,6 +106,22 @@ if(!function_exists('url')) {
     }
 }
 
+if(!function_exists('starts_with')) {
+    function starts_with($haystack, $needle)
+    {
+        return (substr($haystack, 0, strlen($needle)) === $needle);
+    }
+}
+
+if(!function_exists('ends_with')) {
+    function ends_with($haystack, $needle)
+    {
+        $length = strlen($needle);
+
+        return ($length == 0) ? true : (substr($haystack, - $length) === $needle);
+    }
+}
+
 if(!function_exists('mix')) {
     function mix($path, $manifest = false, $shouldHotReload = false, $port = '8080')
     {
@@ -131,6 +147,6 @@ if(!function_exists('mix')) {
         }
         return $shouldHotReload
             ? "http://localhost:{$port}{$manifest[$path]}"
-            : url($manifest[$path]);
+            : url(substr($manifest[$path],1));
     }
 }

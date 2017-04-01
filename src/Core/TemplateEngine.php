@@ -36,7 +36,7 @@ class TemplateEngine
         });
 
         $configFunction = new Twig_SimpleFunction('config', function ($name, $default = '') {
-            return config($name, $default );
+            return config($name, $default);
         });
 
         $mixFunction = new Twig_SimpleFunction('mix', function ($path) {
@@ -57,7 +57,7 @@ class TemplateEngine
     private function createLexers()
     {
         $lexer = new Twig_Lexer($this->twig, array(
-            'tag_comment' => ['/*', '*/'],
+            'tag_comment' => ["<!--", "-->"],
             'tag_variable' => ['{{', '}}'],
             'interpolation' => ['#{', '}']
         ));
