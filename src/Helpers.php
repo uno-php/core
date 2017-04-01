@@ -45,6 +45,7 @@ if(!function_exists('config')) {
 if(!function_exists('view')) {
     function view($name, $params = [], $path = "views/", $ext = '.html')
     {
+//        $container->render($name . $ext,  $params);
         $templateEngine = new TemplateEngine($path);
 
         echo $templateEngine->render($name . $ext,  $params);
