@@ -9,14 +9,14 @@ abstract class DBInteractor {
 
     protected $db;
 
-    function __construct()
+    function __construct($config = null)
     {
-        $this->db = $this->connect();
+        $this->db = $this->connect($config);
     }
 
-    protected function connect()
+    protected function connect($config = null)
     {
-        $config = config('database');
+        $config = is_null($config) ? config('database') : $config;
 
         $dsn = $config['driver'] .":host=". $config['host'] . ";dbname=" . $config['database'] . ";";
 
@@ -25,48 +25,36 @@ abstract class DBInteractor {
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
             return $pdo;
-
         }
         catch (PDOException $e) {
             return $e->getMessage();
         }
     }
 
-
-    protected function executeQuery($sql) // SELECT
+    protected function executeQuery($sql)
     {
         try {
-
             $sth = $this->db->query($sql);
 
             $sth->setFetchMode(PDO::FETCH_ASSOC);
 
-            $results = $sth->fetchAll();
-
-            return $results;
+            return $sth->fetchAll();
         }
         catch (PDOException $e) {
             return $e->getMessage();
         }
-
-
     }
 
-    protected function executeAction($sql, $data = null) // INSERT/UPDATE/DELETE
+    protected function executeAction($sql, $data = null)
     {
         try {
             $sth = $this->db->prepare($sql);
 
-            if ($data === null)
-            {
-                $sth->execute();
-            } else
-            {
-                $sth->execute($data);
-            }
+            ($data === null) ? $sth->execute() : $sth->execute($data);
 
             return true;
-        } catch (PDOException $e) {
+        }
+        catch (PDOException $e) {
             return $e->getMessage();
         }
     }

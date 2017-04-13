@@ -27,7 +27,7 @@ class TemplateEngine
 
     private function createFunctions()
     {
-        $urlFunction = new Twig_SimpleFunction('url', function ($name) {
+        $urlFunction = new Twig_SimpleFunction('url', function ($name = "") {
             return url($name);
         });
 

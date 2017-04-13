@@ -12,10 +12,7 @@ class ErrorHandler
 
     public function handle()
     {
-
-        if(config('app.debug') === false) {
-            return;
-        }
+        if(config('app.debug') === false) return;
 
         $run     = new Run;
         $handler = new PrettyPageHandler;

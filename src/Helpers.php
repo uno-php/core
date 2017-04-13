@@ -1,6 +1,20 @@
 <?php
 
+use Uno\Core\App;
+use Illuminate\Support\Collection;
 use Uno\Core\TemplateEngine;
+
+
+if (! function_exists('app')) {
+    function app($abstract = null)
+    {
+        if (is_null($abstract)) {
+            return App::getInstance();
+        }
+
+        return App::getInstance()->make($abstract);
+    }
+}
 
 if(!function_exists('dd')) {
     function dd(...$args) {
@@ -42,10 +56,22 @@ if(!function_exists('config')) {
     }
 }
 
+if(!function_exists('app')) {
+    function app($name, $params = [], $path = "views/", $ext = '.html')
+    {
+        $template = app('template')->make($path);
+        echo $template->render($name . $ext,  $params);
+//        $templateEngine = new TemplateEngine($path);
+
+//        echo $templateEngine->render($name . $ext,  $params);
+    }
+}
+
 if(!function_exists('view')) {
     function view($name, $params = [], $path = "views/", $ext = '.html')
     {
-//        $container->render($name . $ext,  $params);
+//        $template = app('template')->make($path);
+//        echo $template->render($name . $ext,  $params);
         $templateEngine = new TemplateEngine($path);
 
         echo $templateEngine->render($name . $ext,  $params);
@@ -90,7 +116,7 @@ if(!function_exists('routes_path')) {
 }
 
 if(!function_exists('base_path')) {
-    function base_path($name = '', $basePath = __DIR__ . "/../../../../") {
+    function base_path($name = '', $basePath = __DIR__ . "/../../../framework/") {
         return $basePath. $name;
     }
 }
@@ -149,5 +175,63 @@ if(!function_exists('mix')) {
         return $shouldHotReload
             ? "http://localhost:{$port}{$manifest[$path]}"
             : url(substr($manifest[$path],1));
+    }
+}
+
+if (! function_exists('collect')) {
+    function collect($value = null)
+    {
+        return new Collection($value);
+    }
+}
+
+if (! function_exists('with')) {
+    function with($object)
+    {
+        return $object;
+    }
+}
+
+if (! function_exists('tap')) {
+    function tap($value, $callback)
+    {
+        $callback($value);
+
+        return $value;
+    }
+}
+
+if (! function_exists('object_get')) {
+    function object_get($object, $key, $default = null)
+    {
+        if (is_null($key) || trim($key) == '') {
+            return $object;
+        }
+
+        foreach (explode('.', $key) as $segment) {
+            if (! is_object($object) || ! isset($object->{$segment})) {
+                return value($default);
+            }
+
+            $object = $object->{$segment};
+        }
+
+        return $object;
+    }
+}
+
+if (! function_exists('class_basename')) {
+    function class_basename($class)
+    {
+        $class = is_object($class) ? get_class($class) : $class;
+
+        return basename(str_replace('\\', '/', $class));
+    }
+}
+
+if (! function_exists('array_wrap')) {
+    function array_wrap($value)
+    {
+        return ! is_array($value) ? [$value] : $value;
     }
 }
