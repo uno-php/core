@@ -9,20 +9,31 @@ use Whoops\Util\Misc;
 
 class ErrorHandler
 {
-
     public function handle()
     {
-        if(config('app.debug') === false) return;
+//        if(!config('app.debug'))  $this->nullHandler();
 
-        $run     = new Run;
+        $this->prettyHandler();
+    }
+
+    /**
+     * @return mixed
+     */
+    private function nullHandler()
+    {
+        return view('errors/app', [], 500);
+    }
+
+    private function prettyHandler()
+    {
+        $run = new Run;
         $handler = new PrettyPageHandler;
 
         // Add some custom tables with relevant info about your application,
         // that could prove useful in the error page:
-        $handler->addDataTable(config('app.name').' Details', array(
-//            "Important Data" => $myApp->getImportantData(),
-//            "Thingamajig-id" => $someId
-        ));
+        $handler->addDataTable(config('app.name') . ' Details', [
+            "Uno PHP Version" => app()->version(),
+        ]);
 
         // Set the title of the error page:
         $handler->setPageTitle("Whoops! There was a problem.");
@@ -41,5 +52,4 @@ class ErrorHandler
         // Register the handler with PHP, and you're set!
         $run->register();
     }
-
 }

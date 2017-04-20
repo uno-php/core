@@ -2,17 +2,14 @@
 
 use Uno\Core\App;
 use Illuminate\Support\Collection;
-use Uno\Core\TemplateEngine;
 
 
 if (! function_exists('app')) {
     function app($abstract = null)
     {
-        if (is_null($abstract)) {
-            return App::getInstance();
-        }
-
-        return App::getInstance()->make($abstract);
+        return (is_null($abstract))
+            ? App::getInstance()
+            : App::getInstance()->get($abstract);
     }
 }
 
@@ -56,80 +53,75 @@ if(!function_exists('config')) {
     }
 }
 
-if(!function_exists('app')) {
-    function app($name, $params = [], $path = "views/", $ext = '.html')
-    {
-        $template = app('template')->make($path);
-        echo $template->render($name . $ext,  $params);
-//        $templateEngine = new TemplateEngine($path);
-
-//        echo $templateEngine->render($name . $ext,  $params);
-    }
-}
-
 if(!function_exists('view')) {
-    function view($name, $params = [], $path = "views/", $ext = '.html')
+    function view($name, $params = [], $statusCode = 200, $path = "views/", $ext = '.html')
     {
-//        $template = app('template')->make($path);
-//        echo $template->render($name . $ext,  $params);
-        $templateEngine = new TemplateEngine($path);
+        $template = app('template');
 
-        echo $templateEngine->render($name . $ext,  $params);
+        $template->setPath(resources_path($path));
+
+        $content = $template->render($name . $ext,  $params);
+
+        $response = app('response');
+
+        $response->getBody()->write($content);
+
+        return $response->withStatus($statusCode);
     }
 }
 
 
 if(!function_exists('public_path')) {
     function public_path($name = '') {
-        return base_path("public/" . $name);
+        return base_path("public" . DIRECTORY_SEPARATOR . remove_start_slash($name));
     }
 }
 
 if(!function_exists('resources_path')) {
     function resources_path($name = '') {
-        return base_path("resources/" . $name);
+        return base_path("resources" . DIRECTORY_SEPARATOR . remove_start_slash($name));
     }
 }
 
 if(!function_exists('app_path')) {
     function app_path($name = '') {
-        return base_path("app/" . $name);
+        return base_path("app" . DIRECTORY_SEPARATOR . remove_start_slash($name));
     }
 }
 
 if(!function_exists('storage_path')) {
     function storage_path($name = '') {
-        return base_path("storage/" . $name);
+        return base_path("storage" . DIRECTORY_SEPARATOR . remove_start_slash($name));
     }
 }
 
 if(!function_exists('config_path')) {
     function config_path($name = '') {
-        return base_path("config/" . $name);
+        return base_path("config" . DIRECTORY_SEPARATOR . remove_start_slash($name));
     }
 }
 
 if(!function_exists('routes_path')) {
     function routes_path($name = '') {
-        return base_path("routes/" . $name);
+        return base_path("routes" . DIRECTORY_SEPARATOR . remove_start_slash($name));
     }
 }
 
 if(!function_exists('base_path')) {
-    function base_path($name = '', $basePath = __DIR__ . "/../../../framework/") {
-        return $basePath. $name;
+    function base_path($name = '') {
+        return app()->getBasePath() . DIRECTORY_SEPARATOR . remove_start_slash($name);
     }
 }
 
 if(!function_exists('asset')) {
-    function asset($string){
-        return config('app.url') . '/' . $string;
+    function asset($file) {
+        return config('app.url') . DIRECTORY_SEPARATOR . remove_start_slash($file);
     }
 }
 
 if(!function_exists('url')) {
-    function url($string = ''){
-        return asset($string);
+    function url($path = ''){
+        return asset($path);
     }
 }
 
@@ -148,6 +140,41 @@ if(!function_exists('ends_with')) {
         return ($length == 0) ? true : (substr($haystack, - $length) === $needle);
     }
 }
+
+
+if(!function_exists('remove_ends_with')) {
+    function remove_ends_with($haystack, $needle)
+    {
+        return (ends_with($haystack,$needle))
+            ? substr($haystack, - strlen($needle))
+            : $haystack;
+    }
+}
+
+if(!function_exists('remove_starts_with')) {
+    function remove_starts_with($haystack, $needle)
+    {
+        return (starts_with($haystack,$needle))
+            ? substr($haystack, strlen($needle))
+            : $haystack;
+    }
+}
+
+
+if(!function_exists('remove_end_slash')) {
+    function remove_end_slash($string)
+    {
+        return remove_ends_with($string, DIRECTORY_SEPARATOR);
+    }
+}
+
+if(!function_exists('remove_start_slash')) {
+    function remove_start_slash($string)
+    {
+        return remove_starts_with($string, DIRECTORY_SEPARATOR);
+    }
+}
+
 
 if(!function_exists('mix')) {
     function mix($path, $manifest = false, $shouldHotReload = false, $port = '8080')

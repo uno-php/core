@@ -2,14 +2,13 @@
 
 namespace Uno\Core;
 
-use Uno\Database\DB;
+
 use Uno\Mail\Mail;
+use Uno\Database\DB;
 use Zend\Diactoros\Response;
-use Illuminate\Container\Container;
+use League\Container\Container;
 use Zend\Diactoros\ServerRequestFactory;
 use Zend\Diactoros\Response\SapiEmitter;
-//use Psr\Http\Message\ResponseInterface;
-//use Psr\Http\Message\ServerRequestInterface;
 
 class App extends Container
 {
@@ -20,6 +19,13 @@ class App extends Container
      */
     const VERSION = '0.0.1';
 
+    /**
+     * The current globally available container (if any).
+     *
+     * @var static
+     */
+    protected static $instance;
+
     public $basePath;
 
     /**
@@ -29,7 +35,7 @@ class App extends Container
      */
     public function __construct($basePath = null)
     {
-//        parent::__construct();
+        parent::__construct();
 
         if ($basePath) {
             $this->setBasePath($basePath);
@@ -37,14 +43,9 @@ class App extends Container
 
         $this->registerBaseBindings();
 
+        $this->setupRouteBindings();
+
         $this->loadDefaultBindings();
-
-//        $this->registerBaseServiceProviders();
-
-//        $this->registerCoreContainerAliases();
-
-        parent::__construct();
-
     }
 
     /**
@@ -61,16 +62,23 @@ class App extends Container
     {
         static::setInstance($this);
 
-        $this->instance('app', $this);
+        $this->share('app', $this);
 
-        $this->instance(Container::class, $this);
+        $this->share(Container::class, $this);
     }
 
     public function loadDefaultBindings()
     {
+        // Bind Template Engine
+        $this->share('template', TemplateEngine::class);
+
+        // Bind a shared "database" class to the container
+        // Use a callback to set additional settings
+        $this->share('database', DB::class);
+
         // Bind a "mailer" class to the container
         // Use a callback to set additional settings
-        $this->bind('mailer', function ($container) {
+        $this->share('mailer', function ($container) {
             $mailer = new Mail;
 
             $mailer->username = config('mail.username', 'username');
@@ -79,39 +87,28 @@ class App extends Container
 
             return $mailer;
         });
-
-        // Bind a shared "database" class to the container
-        // Use a callback to set additional settings
-        $this->singleton('database', function ($container) {
-            return new DB();
-        });
-
-        // Bind Template Engine
-        $this->singleton('template', function ($container) {
-            return new TemplateEngine();
-        });
     }
 
-    protected function setupDefaultBindings() {
+    protected function setupRouteBindings()
+    {
+        $this->share('response', Response::class);
 
-        $this->bind('response', Response::class);
+        $this->share('emitter', SapiEmitter::class);
 
-        $this->bind('emitter', SapiEmitter::class);
-
-        $this->bind('request', function () {
+        $this->share('request', function () {
             return ServerRequestFactory::fromGlobals(
                 $_SERVER, $_GET, $_POST, $_COOKIE, $_FILES
             );
         });
     }
 
-    public function run($routesPath = null)
+    public function run($routes = null)
     {
         (new ErrorHandler)->handle();
 
         (new EnvironmentVariables)->load($this->basePath);
 
-        (new Router())->process($this, $routesPath);
+        return (new Router)->process($routes);
     }
 
     public function setBasePath($path)
@@ -122,5 +119,33 @@ class App extends Container
     public function getBasePath()
     {
         return $this->basePath;
+    }
+
+    public function make($id)
+    {
+        return $this->get($id);
+    }
+
+    /**
+     * Set the globally available instance of the container.
+     *
+     * @return static
+     */
+    public static function getInstance()
+    {
+        if (is_null(static::$instance)) {
+            static::$instance = new static;
+        }
+        return static::$instance;
+    }
+
+    /**
+     * Set the shared instance of the container.
+     *
+     * @return static
+     */
+    public static function setInstance($container = null)
+    {
+        return static::$instance = $container;
     }
 }

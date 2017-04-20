@@ -10,19 +10,22 @@ use Twig_SimpleFunction;
 class TemplateEngine
 {
     private $twig;
+    private $viewsPath;
+    private $cachePath;
 
-    public function __construct($viewsPath = 'views', $cachePath = 'cache/twig/'){
-        $loader = new Twig_Loader_Filesystem(resources_path($viewsPath));
+    public function __construct($viewsPath = null, $cachePath = null)
+    {
+        (is_null($viewsPath))
+            ? $this->setPath()
+            : $this->setPath($viewsPath, $cachePath);
 
-        $this->twig = new Twig_Environment($loader, array(
-            'cache' => storage_path($cachePath),
-            'debug' => config('app.debug'),
-            'strict_variables' => true
-        ));
+        $this->load();
+    }
 
-        $this->createFunctions();
-
-        $this->createLexers();
+    public function setPath($viewsPath = 'views', $cachePath = 'cache/twig/')
+    {
+        $this->viewsPath = $viewsPath;
+        $this->cachePath = $cachePath;
     }
 
     private function createFunctions()
@@ -63,5 +66,20 @@ class TemplateEngine
         ));
 
         $this->twig->setLexer($lexer);
+    }
+
+    private function load()
+    {
+        $loader = new Twig_Loader_Filesystem(resources_path($this->viewsPath));
+
+        $this->twig = new Twig_Environment($loader, [
+//            'cache'            => storage_path($this->cachePath),
+            'debug'            => config('app.debug'),
+            'strict_variables' => true
+        ]);
+
+        $this->createFunctions();
+
+        $this->createLexers();
     }
 }

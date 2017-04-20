@@ -18,7 +18,11 @@ abstract class DBInteractor {
     {
         $config = is_null($config) ? config('database') : $config;
 
-        $dsn = $config['driver'] .":host=". $config['host'] . ";dbname=" . $config['database'] . ";";
+        $dsn = $config['driver'] . ":";
+
+        $dsn .= ($config['driver'] == 'sqlite')
+            ? $config['path'] . ";"
+            : "host=". $config['host'] . ";dbname=" . $config['database'] . ";";
 
         try {
             $pdo = new PDO($dsn, $config['username'], $config['password']);

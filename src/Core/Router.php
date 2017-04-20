@@ -6,14 +6,16 @@ use League\Route\RouteCollection;
 
 class Router
 {
-    public function process($app, $routesPath = null)
+    public function process($routesPath = null)
     {
+        $app = app();
+
         $route = new RouteCollection($app);
 
         require_once (is_null($routesPath) ? routes_path('web.php') : $routesPath);
 
-        $response = $route->dispatch($app->make('request'), $app->make('response'));
+        $response = $route->dispatch($app->get('request'), $app->get('response'));
 
-        $app->make('emitter')->emit($response);
+        $app->get('emitter')->emit($response);
     }
 }
