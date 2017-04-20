@@ -10,10 +10,7 @@
     "twig/twig": "^2.3",
     "filp/whoops": "^2.1",
     "tightenco/collect": "^5.4",
-    "illuminate/container": "^5.4",
     "swiftmailer/swiftmailer": "^5.4",
-    "doctrine/orm": "2.4.*",
-    "symfony/yaml": "2.*",
     "league/route": "^3.0",
     "zendframework/zend-diactoros": "^1.4"
   },
