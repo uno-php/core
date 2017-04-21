@@ -38,7 +38,7 @@ if(!function_exists('config')) {
             $data = $data[$value[1]];
 
             if(isset($value[2])&& !is_null($data)) {
-                isset($data[$value[2]]) ? $data[$value[2]] : null;
+                $data = isset($data[$value[2]]) ? $data[$value[2]] : null;
             }
 
             if(isset($value[3])&& !is_null($data)) {
