@@ -33,18 +33,17 @@ if(!function_exists('config')) {
             ? require config_path($value[0]) .'.php'
             : null;
 
-        if((count($value) > 1) && !is_null($data)){
-
+        if((count($value) > 1) && !is_null($data))
+        {
             $data = $data[$value[1]];
 
-            if(isset($value[2])&& !is_null($data)) {
+            if(isset($value[2]) && !is_null($data)) {
                 $data = isset($data[$value[2]]) ? $data[$value[2]] : null;
             }
 
-            if(isset($value[3])&& !is_null($data)) {
+            if(isset($value[3]) && !is_null($data)) {
                 $data = isset($data[$value[3]]) ? $data[$value[3]] : null;
             }
-
         }
 
         return is_null($data)
@@ -126,15 +125,13 @@ if(!function_exists('url')) {
 }
 
 if(!function_exists('starts_with')) {
-    function starts_with($haystack, $needle)
-    {
+    function starts_with($haystack, $needle) {
         return (substr($haystack, 0, strlen($needle)) === $needle);
     }
 }
 
 if(!function_exists('ends_with')) {
-    function ends_with($haystack, $needle)
-    {
+    function ends_with($haystack, $needle) {
         $length = strlen($needle);
 
         return ($length == 0) ? true : (substr($haystack, - $length) === $needle);
@@ -143,8 +140,7 @@ if(!function_exists('ends_with')) {
 
 
 if(!function_exists('remove_ends_with')) {
-    function remove_ends_with($haystack, $needle)
-    {
+    function remove_ends_with($haystack, $needle) {
         return (ends_with($haystack,$needle))
             ? substr($haystack, - strlen($needle))
             : $haystack;
@@ -152,8 +148,7 @@ if(!function_exists('remove_ends_with')) {
 }
 
 if(!function_exists('remove_starts_with')) {
-    function remove_starts_with($haystack, $needle)
-    {
+    function remove_starts_with($haystack, $needle) {
         return (starts_with($haystack,$needle))
             ? substr($haystack, strlen($needle))
             : $haystack;
@@ -162,23 +157,20 @@ if(!function_exists('remove_starts_with')) {
 
 
 if(!function_exists('remove_end_slash')) {
-    function remove_end_slash($string)
-    {
+    function remove_end_slash($string) {
         return remove_ends_with($string, DIRECTORY_SEPARATOR);
     }
 }
 
 if(!function_exists('remove_start_slash')) {
-    function remove_start_slash($string)
-    {
+    function remove_start_slash($string) {
         return remove_starts_with($string, DIRECTORY_SEPARATOR);
     }
 }
 
 
 if(!function_exists('mix')) {
-    function mix($path, $manifest = false, $shouldHotReload = false, $port = '8080')
-    {
+    function mix($path, $manifest = false, $shouldHotReload = false, $port = '8080') {
         if (! $manifest) static $manifest;
         if (! $shouldHotReload) static $shouldHotReload;
         if (! $manifest) {
@@ -206,22 +198,19 @@ if(!function_exists('mix')) {
 }
 
 if (! function_exists('collect')) {
-    function collect($value = null)
-    {
+    function collect($value = null) {
         return new Collection($value);
     }
 }
 
 if (! function_exists('with')) {
-    function with($object)
-    {
+    function with($object) {
         return $object;
     }
 }
 
 if (! function_exists('tap')) {
-    function tap($value, $callback)
-    {
+    function tap($value, $callback) {
         $callback($value);
 
         return $value;
@@ -229,16 +218,12 @@ if (! function_exists('tap')) {
 }
 
 if (! function_exists('object_get')) {
-    function object_get($object, $key, $default = null)
-    {
-        if (is_null($key) || trim($key) == '') {
-            return $object;
-        }
+    function object_get($object, $key, $default = null) {
+        if (is_null($key) || trim($key) == '') return $object;
 
         foreach (explode('.', $key) as $segment) {
-            if (! is_object($object) || ! isset($object->{$segment})) {
+            if (! is_object($object) || ! isset($object->{$segment}))
                 return value($default);
-            }
 
             $object = $object->{$segment};
         }
@@ -248,8 +233,7 @@ if (! function_exists('object_get')) {
 }
 
 if (! function_exists('class_basename')) {
-    function class_basename($class)
-    {
+    function class_basename($class) {
         $class = is_object($class) ? get_class($class) : $class;
 
         return basename(str_replace('\\', '/', $class));
@@ -257,8 +241,7 @@ if (! function_exists('class_basename')) {
 }
 
 if (! function_exists('array_wrap')) {
-    function array_wrap($value)
-    {
+    function array_wrap($value) {
         return ! is_array($value) ? [$value] : $value;
     }
 }

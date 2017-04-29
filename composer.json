@@ -12,7 +12,12 @@
     "tightenco/collect": "^5.4",
     "swiftmailer/swiftmailer": "^5.4",
     "league/route": "^3.0",
-    "zendframework/zend-diactoros": "^1.4"
+    "zendframework/zend-diactoros": "^1.4",
+    "illuminate/database": "^5.4"
+  },
+  "require-dev": {
+    "symfony/var-dumper": "~3.2",
+    "fzaninotto/faker": "~1.4"
   },
   "autoload": {
     "psr-4": {
